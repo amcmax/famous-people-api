@@ -6,7 +6,7 @@ import ArticleList from './components/ArticleList';
 
 function App() {
 
-  const [selectedPerson, setSelectedPerson] = useState(null)
+  const [selectedPerson, setSelectedPerson] = useState('Famous Person')
 
   return (
     <div className="App">
