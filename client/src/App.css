@@ -1,38 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans&display=swap');
+
+.articles-container {
+  display: grid;
+  height: 100vh;
+  grid-template: auto 1fr auto / auto 1fr auto
+}
+
+// etc
+
 .App {
+  background: #09d7e6ff;
+  padding: 2rem;
+  grid-column: 1 / 4;
+}
+
+.left-sidebar {
+  background: #ffc3bfff;
+  grid-column: 1 / 2;
+}
+
+.left-sidebar .person {
+  padding: .5rem;
+  font-weight: 600;
+  font-size:larger;
+}
+
+header {
+  padding-left: 1rem;
+}
+
+main {
+  background: #d99691ff;
+  grid-column: 2 / 3;
+  padding: 1rem;
+}
+
+main ul { 
+  list-style: none;
+}
+
+main li {
+  margin: 0 0 5px 0;
+  font-weight: 500;
+  font-size:larger;
+}
+
+button {
+  font-size: 100%;
+  font-family: inherit;
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+}
+
+footer {
+  background: #faf5f5ff;
+  padding: 2rem;
   text-align: center;
+  grid-column: 1 / 4;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  font-family: 'Nunito Sans', sans-serif;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.left-sidebar,
+.right-sidebar {
+  padding: 1rem;
 }

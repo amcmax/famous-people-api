@@ -1,23 +1,28 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import FamousPersonsList from './components/FamousPersonsList';
+import ArticleList from './components/ArticleList';
+
 
 function App() {
+
+  const [selectedPerson, setSelectedPerson] = useState(null)
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div class="articles-container">
+        <header><h1 contenteditable>Famous People</h1></header>
+        <div class="left-sidebar" contenteditable>
+          <FamousPersonsList setSelectedPerson={setSelectedPerson}/>
+        </div>
+        <main contenteditable>Wikipedia Articles for {selectedPerson.first_name} {selectedPerson.second_name}
+          {
+          selectedPerson &&
+          <ArticleList articles={selectedPerson.articles}/>
+          }
+        </main>
+        <footer contenteditable>Filter by Country: United States, Mexico, Canada</footer>
+      </div>
     </div>
   );
 }
