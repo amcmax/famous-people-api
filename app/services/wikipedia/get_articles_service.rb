@@ -4,6 +4,7 @@ module Wikipedia
   class GetArticlesService
     def initialize(options)
       @person = options[:person]
+      @person_name = set_person_name
       @wikibase_item = get_wikibase_item
     end
 
@@ -13,8 +14,15 @@ module Wikipedia
 
     private
 
+    def set_person_name
+      names = []
+      names.push(@person.first_name)
+      names.push(@person.second_name) if @person.second_name.length > 0
+      return names.length > 1 ? names.join('_') : names[0]
+    end
+
     def get_wikibase_item
-      uri = "https://en.wikipedia.org/w/api.php?action=query&prop=pageprops&format=json&origin=*&titles=#{[@person.first_name.to_s.capitalize, @person.second_name.to_s.capitalize].join('_')}"
+      uri = "https://en.wikipedia.org/w/api.php?action=query&prop=pageprops&format=json&origin=*&titles=#{@person_name}"
       response = Faraday.get(uri)
       response_hash = JSON.parse response.body if response.status == 200
       return @wikibase_item = response_hash["query"]["pages"].flatten[1]["pageprops"]["wikibase_item"]
@@ -23,10 +31,9 @@ module Wikipedia
     def save_articles
       sitelinks = set_relevant_languages
       sitelinks.each do |sitelink|
-        article_url = "https://#{sitelink}.wikipedia.org/wiki/#{[@person.first_name.to_s.capitalize, @person.second_name.to_s.capitalize].join('_')}"
+        article_url = "https://#{sitelink}.wikipedia.org/wiki/#{@person_name}"
         response = Faraday.get(article_url)
         article = Article.new(
-          title: [@person.first_name, @person.second_name].join(' '),
           url: article_url,
           source: Source.find_by(name: "Wikipedia"),
           language: Language.find_by(value: sitelink),
@@ -55,7 +62,7 @@ module Wikipedia
     end
 
     def get_word_count(language_value)
-      uri = "https://#{language_value}.wikipedia.org/w/api.php?format=json&origin=*&action=query&list=search&srwhat=nearmatch&srlimit=1&srsearch=#{[@person.first_name.to_s.capitalize, @person.second_name.to_s.capitalize].join('_')}"
+      uri = "https://#{language_value}.wikipedia.org/w/api.php?format=json&origin=*&action=query&list=search&srwhat=nearmatch&srlimit=1&srsearch=#{@person_name}"
       response = Faraday.get(uri)
       response_hash = JSON.parse response.body if response.status == 200
       return response_hash["query"]["search"][0]["wordcount"]
