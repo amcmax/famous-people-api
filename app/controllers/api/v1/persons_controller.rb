@@ -9,13 +9,12 @@ module Api::V1
     end
 
     def create
-      country = Country.find_by(code: person_params[:country])
-      p country
       @persons = Person.create(
-        first_name: person_params[:first_name], 
-        second_name: person_params[:second_name], 
-        country: country)
-      
+        first_name: person_params[:first_name],
+        second_name: person_params[:second_name],
+        country: Country.find_by(code: person_params[:country])
+      )
+
       if @persons.save!
         render json: @person, status: :created
       else
@@ -23,12 +22,17 @@ module Api::V1
       end
     end
 
+    def destroy
+      @persons = Person.find(params[:id])
+      @persons.destroy
+    end
+
     private
 
     def person_params
       params
           .require(:person)
-          .permit(:first_name, :second_name, :country)
+          .permit(:id, :first_name, :second_name, :country)
     end
   end
 end
